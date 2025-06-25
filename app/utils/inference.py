@@ -42,6 +42,8 @@ def predict_image(pil_image: Image.Image, model_type: str) -> str:
     """
     Melakukan prediksi kelas gambar menggunakan model ResNet50.
     """
+    idx_to_class = {v: k for k, v in labels.items()}
+
     if model_type == "resnet":
         model = load_model(model_resnet50)
         input_tensor = preprocess_image_for_resnet50(pil_image)
@@ -53,5 +55,6 @@ def predict_image(pil_image: Image.Image, model_type: str) -> str:
     predictions = model.predict(input_tensor)
     predicted_class_index = np.argmax(predictions, axis=1)[0]
     confidence_score = float(np.max(predictions, axis=1)[0])
-    return labels[predicted_class_index], confidence_score
+    return idx_to_class[int(predicted_class_index)], confidence_score
+
 

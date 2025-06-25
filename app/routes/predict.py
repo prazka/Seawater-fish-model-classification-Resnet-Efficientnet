@@ -22,13 +22,13 @@ def predict():
     filename = secure_filename(image_file.filename)
     img = Image.open(image_file.stream).convert("RGB")
     
-    model_type = request.form.get("model_type")
+    model_type = request.form.get("model")
     if model_type not in ["resnet", "efficientnet"]:
         return jsonify({"error": "model_type must be 'resnet' or 'efficientnet'"}), 400
 
     try:
         img = Image.open(image_file.stream).convert("RGB")
         prediction, confidence = predict_image(img, model_type)
-        return jsonify({"prediction": prediction, "confidence": confidence})
+        return jsonify({"class": prediction, "confidence": confidence})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
